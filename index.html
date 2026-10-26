@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AWS VPC Peering internship project demonstrating private cloud networking, routing, security groups, and connectivity testing.">
+    <title>AWS VPC Peering | Cloud Security Project</title>
+
+```
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #0b1120;
+        color: #e5e7eb;
+        line-height: 1.7;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .navbar {
+        padding: 18px 8%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #263249;
+        background: #0b1120;
+    }
+
+    .logo {
+        font-size: 20px;
+        font-weight: bold;
+        color: #60a5fa;
+    }
+
+    .nav-link {
+        color: #cbd5e1;
+        font-size: 14px;
+    }
+
+    .hero {
+        padding: 90px 8% 75px;
+        background: linear-gradient(135deg, #111c35, #0b1120 70%);
+        text-align: center;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border: 1px solid #31558a;
+        border-radius: 30px;
+        color: #93c5fd;
+        font-size: 13px;
+        margin-bottom: 22px;
+    }
+
+    h1 {
+        font-size: clamp(34px, 6vw, 58px);
+        line-height: 1.15;
+        margin-bottom: 22px;
+        color: #ffffff;
+    }
+
+    .highlight {
+        color: #60a5fa;
+    }
+
+    .hero p {
+        max-width: 760px;
+        margin: 0 auto 30px;
+        color: #b8c4d8;
+        font-size: 17px;
+    }
+
+    .button {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        padding: 12px 22px;
+        border-radius: 8px;
+        margin: 6px;
+        font-weight: bold;
+    }
+
+    .button.secondary {
+        background: transparent;
+        border: 1px solid #52627a;
+    }
+
+    .container {
+        width: 84%;
+        max-width: 1150px;
+        margin: auto;
+    }
+
+    section {
+        padding: 65px 0;
+    }
+
+    .section-title {
+        font-size: 30px;
+        color: white;
+        margin-bottom: 12px;
+    }
+
+    .section-intro {
+        color: #a9b7cc;
+        margin-bottom: 28px;
+        max-width: 780px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: #121c2e;
+        border: 1px solid #26364f;
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    .card h3 {
+        color: #93c5fd;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        color: #b8c4d8;
+        font-size: 14px;
+    }
+
+    .architecture {
+        background: #0e1728;
+        border: 1px solid #26364f;
+        border-radius: 12px;
+        padding: 25px;
+        overflow-x: auto;
+    }
+
+    .architecture pre {
+        color: #bfdbfe;
+        font-family: Consolas, monospace;
+        font-size: 14px;
+        line-height: 1.8;
+        min-width: 560px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+        border: 1px solid #26364f;
+        border-radius: 10px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 550px;
+        background: #121c2e;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 14px;
+        border-bottom: 1px solid #26364f;
+    }
+
+    th {
+        background: #192741;
+        color: #bfdbfe;
+    }
+
+    td {
+        color: #d1d9e6;
+    }
+
+    .status {
+        color: #86efac;
+        font-weight: bold;
+    }
+
+    .report-box {
+        background: #121c2e;
+        border: 1px solid #31558a;
+        border-radius: 12px;
+        padding: 30px;
+    }
+
+    .report-box p {
+        color: #b8c4d8;
+        margin: 12px 0 20px;
+    }
+
+    .note {
+        color: #94a3b8;
+        font-size: 13px;
+        margin-top: 18px;
+    }
+
+    footer {
+        border-top: 1px solid #263249;
+        padding: 25px 8%;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+        .navbar {
+            padding: 16px 5%;
+        }
+
+        .hero {
+            padding: 65px 6%;
+        }
+
+        .container {
+            width: 90%;
+        }
+
+        section {
+            padding: 45px 0;
+        }
+
+        .section-title {
+            font-size: 26px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<nav class="navbar">
+    <div class="logo">AWS Cloud Project</div>
+    <a class="nav-link" href="#overview">Explore Project ↓</a>
+</nav>
+
+<header class="hero">
+    <span class="badge">INTERNSHIP PROJECT · CLOUD NETWORKING</span>
+
+    <h1>
+        AWS VPC <span class="highlight">Peering</span><br>
+        & Secure Connectivity
+    </h1>
+
+    <p>
+        A hands-on AWS networking project demonstrating private
+        communication between two Virtual Private Clouds through
+        VPC Peering, route tables, security groups, and connectivity testing.
+    </p>
+
+    <a class="button" href="#architecture">Explore Architecture</a>
+    <a class="button secondary" href="#report">View Project Report</a>
+</header>
+
+<main>
+
+    <section id="overview">
+        <div class="container">
+            <h2 class="section-title">Project Overview</h2>
+            <p class="section-intro">
+                The objective was to establish private network communication
+                between two separate Amazon VPCs while controlling traffic
+                through routing and security-group rules.
+            </p>
+
+            <div class="grid">
+                <article class="card">
+                    <h3>☁️ VPC Networking</h3>
+                    <p>
+                        Created two VPCs with non-overlapping CIDR ranges
+                        and configured public and private subnets.
+                    </p>
+                </article>
+
+                <article class="card">
+                    <h3>🔗 VPC Peering</h3>
+                    <p>
+                        Established a peering connection and configured
+                        routes for private communication between VPCs.
+                    </p>
+                </article>
+
+                <article class="card">
+                    <h3>🛡️ Security Controls</h3>
+                    <p>
+                        Configured security groups to restrict SSH and ICMP
+                        traffic to the intended source addresses.
+                    </p>
+                </article>
+
+                <article class="card">
+                    <h3>🧪 Connectivity Testing</h3>
+                    <p>
+                        Tested communication in both directions and verified
+                        the effect of temporarily blocking ICMP traffic.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture">
+        <div class="container">
+            <h2 class="section-title">AWS Architecture</h2>
+            <p class="section-intro">
+                The lab used a bastion host in the public subnet of VPC A
+                and two private application instances across the peered VPCs.
+            </p>
+
+            <div class="architecture">
+```
+
+<pre>
+                 AWS VPC PEERING ARCHITECTURE
+
+  VPC A: 10.10.0.0/16
+  ┌───────────────────────────────────────┐
+  │                                       │
+  │  Public Subnet: 10.10.1.0/24          │
+  │  ┌───────────────────────────────┐    │
+  │  │ Bastion Host                  │    │
+  │  │ 10.10.1.10                    │    │
+  │  └───────────────┬───────────────┘    │
+  │                  │                    │
+  │  Private Subnet: 10.10.2.0/24         │
+  │  ┌───────────────▼───────────────┐    │
+  │  │ App-A: 10.10.2.10             │    │
+  │  └───────────────┬───────────────┘    │
+  └──────────────────┼────────────────────┘
+                     │
+              VPC PEERING
+                     │
+  ┌──────────────────┼────────────────────┐
+  │                  │                    │
+  │  Private Subnet: 10.20.1.0/24         │
+  │  ┌───────────────▼───────────────┐    │
+  │  │ App-B: 10.20.1.10             │    │
+  │  └───────────────────────────────┘    │
+  │                                       │
+  │  VPC B: 10.20.0.0/16                  │
+  └───────────────────────────────────────┘
+</pre>
+
+```
+            </div>
+        </div>
+    </section>
+
+    <section id="configuration">
+        <div class="container">
+            <h2 class="section-title">AWS Configuration</h2>
+            <p class="section-intro">
+                Resource configuration used during the lab.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Resource</th>
+                            <th>Name</th>
+                            <th>Configuration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>VPC A</td>
+                            <td>ewb-vpc-a</td>
+                            <td>10.10.0.0/16</td>
+                        </tr>
+                        <tr>
+                            <td>VPC B</td>
+                            <td>ewb-vpc-b</td>
+                            <td>10.20.0.0/16</td>
+                        </tr>
+                        <tr>
+                            <td>Public Subnet</td>
+                            <td>ewb-a-public</td>
+                            <td>10.10.1.0/24</td>
+                        </tr>
+                        <tr>
+                            <td>Private Subnet A</td>
+                            <td>ewb-a-private</td>
+                            <td>10.10.2.0/24</td>
+                        </tr>
+                        <tr>
+                            <td>Private Subnet B</td>
+                            <td>ewb-b-private</td>
+                            <td>10.20.1.0/24</td>
+                        </tr>
+                        <tr>
+                            <td>VPC Peering</td>
+                            <td>ewb-a-b-peer</td>
+                            <td>Active during testing</td>
+                        </tr>
+                        <tr>
+                            <td>AWS Region</td>
+                            <td>Mumbai</td>
+                            <td>ap-south-1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="note">
+                The EC2 instances used for the lab were terminated after testing.
+                The architecture above documents the completed lab configuration.
+            </p>
+        </div>
+    </section>
+
+    <section id="testing">
+        <div class="container">
+            <h2 class="section-title">Testing & Results</h2>
+            <p class="section-intro">
+                Connectivity and security controls were validated during the lab.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Test</th>
+                            <th>Observed Result</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>App-A → App-B</td>
+                            <td>4 packets received; 0% packet loss</td>
+                            <td class="status">Passed</td>
+                        </tr>
+                        <tr>
+                            <td>App-B → App-A</td>
+                            <td>4 packets received; 0% packet loss</td>
+                            <td class="status">Passed</td>
+                        </tr>
+                        <tr>
+                            <td>Controlled ICMP blocking</td>
+                            <td>100% packet loss while the rule was removed</td>
+                            <td class="status">Passed</td>
+                        </tr>
+                        <tr>
+                            <td>Connectivity recovery</td>
+                            <td>Communication restored after the rule was added back</td>
+                            <td class="status">Passed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title">Skills & Learning Outcomes</h2>
+
+            <div class="grid">
+                <article class="card">
+                    <h3>Networking</h3>
+                    <p>VPCs, CIDR addressing, subnets, route tables, and peering.</p>
+                </article>
+
+                <article class="card">
+                    <h3>Cloud Infrastructure</h3>
+                    <p>EC2 deployment, bastion access, and private instances.</p>
+                </article>
+
+                <article class="card">
+                    <h3>Cloud Security</h3>
+                    <p>Security-group configuration and controlled traffic testing.</p>
+                </article>
+
+                <article class="card">
+                    <h3>Troubleshooting</h3>
+                    <p>SSH access, ping validation, failure analysis, and recovery.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="report">
+        <div class="container">
+            <h2 class="section-title">Project Documentation</h2>
+
+            <div class="report-box">
+                <h3>📄 Internship Project Report</h3>
+                <p>
+                    Review the detailed PDF report for the project documentation,
+                    AWS configuration screenshots, and terminal test evidence.
+                </p>
+
+                <a
+                    class="button"
+                    href="AWS_VPC_Peering_Internship_Report.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Open Project PDF ↗
+                </a>
+
+                <p class="note">
+                    If the PDF doesn't open, confirm that the filename in this
+                    repository exactly matches the filename referenced here.
+                </p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>AWS VPC Peering Internship Project</p>
+    <p>Cloud Networking · Infrastructure · Security Fundamentals</p>
+    <p>Educational project documentation. No AWS credentials or private keys are included.</p>
+</footer>
+```
+
+</body>
+</html>
